@@ -17,15 +17,16 @@ pub fn build(b: *std.Build) void {
     });
     b.installArtifact(exe);
     exe.linkLibC();
+    exe.linkSystemLibrary("SDL2"); // , .{ .preferred_link_mode = .static });
 
     // Get SDL 
-    const sdl_dep = b.dependency("sdl", .{
-        .target = target,
-        .optimize = optimize,
-        //.preferred_link_mode = .static, // or .dynamic
-    });
-    const sdl_lib = sdl_dep.artifact("SDL3");
-    exe.root_module.linkLibrary(sdl_lib);
+    // const sdl_dep = b.dependency("sdl", .{
+    //     .target = target,
+    //     .optimize = optimize,
+    //     //.preferred_link_mode = .static, // or .dynamic
+    // });
+    // const sdl_lib = sdl_dep.artifact("SDL3");
+    // exe.root_module.linkLibrary(sdl_lib);
 
     // Run command
     const run_cmd = b.addRunArtifact(exe);
