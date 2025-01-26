@@ -26,10 +26,15 @@
     flake-utils.lib.eachSystem systems (
       system: let
         pkgs = import nixpkgs {inherit overlays system;};
+        zig = pkgs.zig;
       in rec {
-        devShells.default = pkgs.mkShell {
+        # devShells.default = pkgs.mkShell {
+        devShells.default = pkgs.buildFHSEnv {
+          name = "fhs-default";
           nativeBuildInputs = with pkgs; [
             zig
+            sdl3.lib
+            sdl3.dev
           ];
         };
 
