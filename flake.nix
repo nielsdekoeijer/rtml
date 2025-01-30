@@ -17,8 +17,8 @@
     nixpkgs = nixpkgs-unstable;
     overlays = [
       (final: prev: rec {
-        zig = inputs.zig.packages.${prev.system}."master";
-        game = prev.callPackage ./nix/package.nix {};
+        zig = inputs.zig.packages.${prev.system}."0.13.0";
+        mlinference = prev.callPackage ./nix/package.nix {};
       })
     ];
    systems = builtins.attrNames inputs.zig.packages;
@@ -26,20 +26,20 @@
     flake-utils.lib.eachSystem systems (
       system: let
         pkgs = import nixpkgs {inherit overlays system;};
-        zig = pkgs.zig;
       in rec {
-        # devShells.default = pkgs.mkShell {
         devShells.default = pkgs.buildFHSEnv {
-          name = "fhs-default";
-          nativeBuildInputs = with pkgs; [
-            zig
-            sdl3.lib
-            sdl3.dev
+          name = "fhs";
+          targetPkgs = pkgs: [
+            pkgs.zig
+            pkgs.bash
+            pkgs.pkg-config
+            pkgs.curl
+            pkgs.unzip
           ];
         };
 
-        packages.game = pkgs.game;
-        defaultPackage = packages.game;
+        packages.fhs = devShells.default;
+        defaultPackage = packages.fhs;
       }
     );
   }

@@ -5,28 +5,29 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    // Get protobuf_c
+    const protobuf_c_dep = b.dependency("protobuf_c", .{
+    .target = target,
+    .optimize = optimize,
+    });
+
     // Specify executable
-    const exe_mod = b.createModule(.{
+    const exe = b.addExecutable(.{
+        .name = "mlinference",
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
-    const exe = b.addExecutable(.{
-        .name = "game",
-        .root_module = exe_mod,
-    });
     b.installArtifact(exe);
-    exe.linkLibC();
-    exe.linkSystemLibrary("SDL2"); // , .{ .preferred_link_mode = .static });
-
-    // Get SDL 
-    // const sdl_dep = b.dependency("sdl", .{
-    //     .target = target,
-    //     .optimize = optimize,
-    //     //.preferred_link_mode = .static, // or .dynamic
-    // });
-    // const sdl_lib = sdl_dep.artifact("SDL3");
-    // exe.root_module.linkLibrary(sdl_lib);
+    exe.addCSourceFile(.{
+        .file =  b.path("src/proto/onnx.proto3.pb-c.c"),
+        .flags = &[_][]const u8 {
+            "-Isrc/proto",
+        },
+    });
+    exe.addIncludePath(b.path("src/proto/"));
+    exe.linkLibrary(protobuf_c_dep.artifact("protobuf_c"));
+    exe.linkLibCpp();
 
     // Run command
     const run_cmd = b.addRunArtifact(exe);
