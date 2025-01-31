@@ -7,8 +7,8 @@ pub fn build(b: *std.Build) void {
 
     // Get protobuf_c
     const protobuf_c_dep = b.dependency("protobuf_c", .{
-    .target = target,
-    .optimize = optimize,
+        .target = target,
+        .optimize = optimize,
     });
 
     // Specify executable
@@ -20,14 +20,14 @@ pub fn build(b: *std.Build) void {
     });
     b.installArtifact(exe);
     exe.addCSourceFile(.{
-        .file =  b.path("src/proto/onnx.proto3.pb-c.c"),
-        .flags = &[_][]const u8 {
+        .file = b.path("src/proto/onnx.proto3.pb-c.c"),
+        .flags = &[_][]const u8{
             "-Isrc/proto",
         },
     });
     exe.addIncludePath(b.path("src/proto/"));
     exe.linkLibrary(protobuf_c_dep.artifact("protobuf_c"));
-    exe.linkLibCpp();
+    exe.linkLibC();
 
     // Run command
     const run_cmd = b.addRunArtifact(exe);
