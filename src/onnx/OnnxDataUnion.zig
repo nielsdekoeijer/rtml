@@ -4,7 +4,6 @@ const OnnxDataType = @import("OnnxDataType.zig").OnnxDataType;
 const OnnxTensor = @import("OnnxTensor.zig").OnnxTensor;
 const OnnxGraph = @import("OnnxGraph.zig").OnnxGraph;
 const OnnxSparseTensor = @import("OnnxSparseTensor.zig").OnnxSparseTensor;
-const OnnxType = @import("OnnxType.zig").OnnxType;
 
 pub const OnnxDataUnion = union(OnnxDataType) {
     UNDEFINED: void,

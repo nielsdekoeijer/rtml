@@ -67,12 +67,8 @@ pub fn parseOnnxModel(
     );
 
     var training_info = std.ArrayList(OnnxTrainingInfo).init(allocator);
-    // const training_info = model.training_info;
-    // std.log.debug("Read training_info: '{}'", .{training_info});
 
     var functions = std.ArrayList(OnnxFunction).init(allocator);
-    // const functions = model.functions;
-    // std.log.debug("Read functions: '{}'", .{functions});
 
     return OnnxModel{
         .ir_version = ir_version,

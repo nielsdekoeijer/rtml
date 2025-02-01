@@ -1,13 +1,16 @@
 const std = @import("std");
 
-const OnnxType = @import("OnnxType.zig").OnnxType;
+const OnnxTensorShape = @import("OnnxTensorShape.zig").OnnxTensorShape;
+const parseOnnxTensorShape = @import("OnnxTensorShape.zig").parseOnnxTensorShape;
+const OnnxStandardType = @import("OnnxStandardType.zig").OnnxStandardType;
+const OnnxStandardUnion = @import("OnnxStandardUnion.zig").OnnxStandardUnion;
 const OnnxStringStringEntry = @import("OnnxStringStringEntry.zig").OnnxStringStringEntry;
 const parseOnnxStringStringEntryList = @import("OnnxStringStringEntry.zig").parseOnnxStringStringEntryList;
 const fromCString = @import("util.zig").fromCString;
 
 pub const OnnxValueInfo = struct {
     name: []const u8,
-    type: OnnxType,
+    type: OnnxStandardUnion,
     doc_string: []const u8,
     metadata_props: []OnnxStringStringEntry,
 };
@@ -43,7 +46,28 @@ pub fn parseOnnxValueInfo(
     const name = try fromCString(allocator, value.name);
     std.log.debug("Read name: '{s}'", .{name});
 
-    const @"type" = undefined;
+    const standard = value.type.*;
+    const standard_type = @as(OnnxStandardType, @enumFromInt(standard.value_case));
+    std.log.debug("Read type: '{s}'", .{@tagName(standard_type)});
+    const @"type" = switch(standard_type) {
+        OnnxStandardType.TENSOR_TYPE =>  blk: {
+            const inner = standard.unnamed_0.tensor_type.*;
+            const elem_type = inner.elem_type;
+            const shape = try parseOnnxTensorShape(allocator, inner.shape);
+            break :blk @unionInit(
+                OnnxStandardUnion,
+                "TENSOR_TYPE",
+                .{
+                    .elem_type = elem_type,
+                    .shape = shape,
+                }
+            );
+        },
+        else => {
+            std.log.err("No support for type: '{s}'", .{@tagName(standard_type)});
+            unreachable;
+        }
+    };
 
     const doc_string = try fromCString(allocator, value.doc_string);
     std.log.debug("Read doc string: '{s}'", .{doc_string});

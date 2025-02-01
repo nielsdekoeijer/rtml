@@ -4,7 +4,7 @@ const OnnxAttributeType = @import("OnnxAttributeType.zig").OnnxAttributeType;
 const OnnxTensor = @import("OnnxTensor.zig").OnnxTensor;
 const OnnxGraph = @import("OnnxGraph.zig").OnnxGraph;
 const OnnxSparseTensor = @import("OnnxSparseTensor.zig").OnnxSparseTensor;
-const OnnxType = @import("OnnxType.zig").OnnxType;
+const OnnxStandardType = @import("OnnxStandardType.zig").OnnxStandardType;
 
 pub const OnnxAttributeUnion = union(OnnxAttributeType) {
     UNDEFINED: void,
@@ -14,12 +14,12 @@ pub const OnnxAttributeUnion = union(OnnxAttributeType) {
     TENSOR: OnnxTensor,
     GRAPH: OnnxGraph,
     SPARSE_TENSOR: OnnxSparseTensor,
-    TYPE_PROTO: OnnxType,
+    TYPE_PROTO: OnnxStandardType,
     FLOATS: []f32,
     INTS: []i64,
     STRINGS: [][]const u8,
     TENSORS: []OnnxTensor,
     GRAPHS: []OnnxGraph,
     SPARSE_TENSORS: []OnnxSparseTensor,
-    TYPE_PROTOS: []OnnxType,
+    TYPE_PROTOS: []OnnxStandardType,
 };

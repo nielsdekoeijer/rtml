@@ -2,7 +2,7 @@ const std = @import("std");
 const util = @import("onnx/util.zig");
 const OnnxProto = @import("onnx/OnnxProto.zig").OnnxProto;
 const parseOnnxModel = @import("onnx/OnnxModel.zig").parseOnnxModel;
-const generateCode = @import("impl/CodeGen.zig").generateCode;
+const generateCode = @import("gen/CodeGen.zig").generateCode;
 
 pub fn main() !void {
     const allocator = std.heap.page_allocator;
