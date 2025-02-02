@@ -14,7 +14,7 @@ pub fn parseOnnxTensorShape(
     const len = value.*.n_dim;
 
     std.log.debug(
-        "Attempting to parse a OnnxTensorShape with len '{}'", 
+        "Attempting to parse a OnnxTensorShape with len '{}'",
         .{len},
     );
 
@@ -40,7 +40,7 @@ pub fn parseOnnxTensorShape(
 
     const slice = try list.toOwnedSlice();
     std.log.debug(
-        "Read shape: '{any}'", 
+        "Read shape: '{any}'",
         .{slice},
     );
 

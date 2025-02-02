@@ -34,5 +34,9 @@ pub fn main() !void {
         );
 
         try generateCode(&arena, parsed);
+
+        var graph = try @import("model/model.zig").CNTKGraph.init();
+
+        graph.process();
     }
 }

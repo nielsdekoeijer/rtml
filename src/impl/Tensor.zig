@@ -13,11 +13,10 @@ pub fn Tensor(comptime T: type, comptime Shape: anytype) type {
 
             pub fn init(values: anytype) Self {
                 var data: [Self._len()]T = undefined;
-                comptime {
-                    @setEvalBranchQuota(10 * Self._len());
-                    for (0..Self._len()) |i| {
-                        data[i] = values[i];
-                    }
+
+                @setEvalBranchQuota(10 * Self._len());
+                inline for (0..Self._len()) |i| {
+                    data[i] = values[i];
                 }
 
                 return Self{

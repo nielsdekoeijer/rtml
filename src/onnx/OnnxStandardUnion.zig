@@ -1,16 +1,16 @@
 const OnnxStandardType = @import("OnnxStandardType.zig").OnnxStandardType;
 const OnnxTensorShape = @import("OnnxTensorShape.zig").OnnxTensorShape;
+const OnnxAttributeType = @import("OnnxAttributeType.zig").OnnxAttributeType;
 
 const OnnxStandardTensor = struct {
-    elem_type: i32,
+    elem_type: OnnxAttributeType,
     shape: OnnxTensorShape,
 };
 
 const OnnxStandardSparseTensor = struct {
-    elem_type: i32,
+    elem_type: OnnxAttributeType,
     shape: OnnxTensorShape,
 };
-
 
 pub const OnnxStandardUnion = union(OnnxStandardType) {
     NOT_SET: void,
