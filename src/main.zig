@@ -8,7 +8,7 @@ pub fn main() !void {
     const allocator = std.heap.page_allocator;
 
     const models = [_][]const u8{
-        "mnist-8.onnx",
+        "add.onnx",
     };
 
     inline for (models) |model| {
@@ -35,8 +35,7 @@ pub fn main() !void {
 
         try generateCode(&arena, parsed);
 
-        var graph = try @import("model/model.zig").CNTKGraph.init();
-
+        var graph = try @import("model/model.zig").AddGraph.init();
         graph.process();
     }
 }
